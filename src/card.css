@@ -8,13 +8,9 @@
 		transform: translateX(0);
 	}
 	100% {
-		transform: translateX(calc(-450px * 10 - 0.5rem * 20));  /*1. Ancho de la tarjeta 2. Cantidad de tarjetas no duplicadas (10) 3. Margen 4. Cantidad de elementos duplicados (20)*/
+		transform: translateX(calc(-400px * 10 - 0.5rem * 20));  /*1. Ancho de la tarjeta 2. Cantidad de tarjetas no duplicadas (10) 3. Margen 4. Cantidad de elementos duplicados (20)*/
 	}
-
 }
-
-.animate-scroll {
-  animation: scroll 13s linear infinite;   /* Tiempo que se demora la animación, en infinito*/}
 
 
 @layer utilities {
@@ -22,7 +18,9 @@
     text-wrap: balance;
   }
 
-
+  .animate-scroll {
+    animation: scroll 13s linear infinite;   /* Tiempo que se demora la animación, en infinito*/}
+  
     .card {
       display: inline-block;
       margin: 5px;
@@ -46,10 +44,5 @@
   .card:hover {
       box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     }
-
-  .body {
-       background: #603085
-  }
-
   
   }
