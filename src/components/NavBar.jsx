@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import  Link  from "next/link";
+import  {Link}  from "react-router-dom";
 
 // import EditarGato from "@/editargato/EditarGato";
 // import Galeria from "@/galeria/Galeria";
@@ -19,32 +19,32 @@ const NavBar = () => {
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-28">
                 <Link
-                  href="/"
+                  to="/"
                   className="bg-gray-900 text-white hover:bg-white hover:text-blue-900 rounded-md px-3 py-2 text-lg font-medium"
                   aria-current="page"
                 >
                   Inicio
                 </Link>
                 <Link
-                  href="/listado"
+                  to="/listado"
                   className="text-gray-300 hover:bg-yellow-400 hover:text-blue-400 rounded-md px-3 py-2 text-lg font-medium"
                 >
                   Gatos en Adopción
                 </Link>
                 <Link
-                  href="/agregargato"
+                  to="/agregargato"
                   className="text-gray-300 hover:bg-yellow-500 hover:text-blue-500 rounded-md px-3 py-2 text-lg font-medium"
                 >
                   Ingresar un gato
                 </Link>
                 <Link
-                  href="/editargato"
+                  to="/editargato"
                   className="text-gray-300 hover:bg-yellow-600 hover:text-blue-600 rounded-md px-3 py-2 text-lg font-medium"
                 >
                   Editar datos
                 </Link>
                 <Link
-                  href="/galeria"
+                  to="/galeria"
                   className="text-gray-300 hover:bg-yellow-700 hover:text-yellow-200 rounded-md px-3 py-2 text-lg font-medium"
                 >
                   Galería de razas
@@ -65,25 +65,25 @@ const NavBar = () => {
             Inicio
           </Link>
           <Link
-            href="/listado"
+            to="/listado"
             className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
           >
             Gatos en Adopción
           </Link>
           <Link
-            href="/agregargato"
+            to="/agregargato"
             className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
           >
             Ingresar un gato
           </Link>
           <Link
-            href="/editargato"
+            to="/editargato"
             className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
           >
             Editar datos
           </Link>
           <Link
-            href="/galeria"
+            to="/galeria"
             className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
           >
             Galería de razas
