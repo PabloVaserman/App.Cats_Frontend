@@ -15,10 +15,12 @@ import "../../src/card.css";
 function App() {
   return (
     <div className="Aplicacion-Gatos">
+     
+      <BrowserRouter>
       <NavBar />
       <Fondo />
-      <BrowserRouter>
         <Routes>
+       
           <Route path="/" element={<Carrusel />}></Route>
           <Route path="/listado" element={<Gatos />}></Route>
           <Route path="/agregargato" element={<AgregarGato />}></Route>
