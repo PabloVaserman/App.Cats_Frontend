@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
 import React from "react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import '../../src/card.css'
+import "../../src/card.css";
 
 function Gatos() {
   // "Gatos" se dispara apenas se inicia la página
@@ -17,8 +17,8 @@ function Gatos() {
   }, []);
 
   const obtenerGatos = async () => {
-    const gatos = (await axios.get("http://localhost:5050/gatos")).data;
-    setData(gatos); // Le coloca esa info. a "data" (la lista de gatos obtenida en el Back)
+    const {data} = await axios.get("http://localhost:5050/rutasGatos/listado");   // Desestructuro la petición (el objeto). 
+    if (data)setData(data); // Le coloca esa info. a "data" (la lista de gatos obtenida en el Back)
   };
 
   function borrarGato(idGato) {
@@ -38,15 +38,16 @@ function Gatos() {
   return (
     // Renderiza la base de datos
 
-    
-<div className="flex items-center justify-between w-full h-16 bg-blue-300">
-      <h3 className="text-2xl font-bold mb-4 underline text-cyan-950 font-sans">GATOS EN ADOPCIÓN</h3>
+    <div className="flex items-center justify-between w-full h-16 bg-blue-300">
+      <h3 className="text-2xl font-bold mb-4 underline text-cyan-950 font-sans">
+        GATOS EN ADOPCIÓN
+      </h3>
       <div className="flex  gap-2">
         {/* Borrado lógico: no lo muestra si el estado es "false" */}
         {/* ACÁ EMPIEZA */}
         {data.map((item) => {
-
-          {/* Aquí incluir verificación con DATA REGEX si la DB tiene datos o está vacía antes de renderizar
+          {
+            /* Aquí incluir verificación con DATA REGEX si la DB tiene datos o está vacía antes de renderizar
          
          //Queremos que antes de que se envíe el form se analicen algunas cosas
     e.preventDefault(); //detener el comportamiento por defecto del submit, para que no se me guarde cualquier cosa en el form
@@ -63,7 +64,8 @@ function Gatos() {
       return;       
     }
         
-        */}
+        */
+          }
           if (item.estado === true)
             return (
               //   { (item.estado == true) &&
@@ -73,7 +75,10 @@ function Gatos() {
                   {" "}
                   {/* Cada elemento debe tener una key*/}{" "}
                   <div className="row" key={item._id + 2}>
-                    <div key={item._id} className="text-purple-500 text-xl font-sans">
+                    <div
+                      key={item._id}
+                      className="text-purple-500 text-xl font-sans"
+                    >
                       <img src={item.image}></img>
                       <p>Nombre:{item.name}</p>
                       <p>Raza:{item.breed}</p>
@@ -81,7 +86,9 @@ function Gatos() {
                       <p>Caracter:{item.temperament}</p>
                       <p>Descripción:{item.description}</p>
                       <Link to={"/editargato/${item._id}"}>
-                        <li className="border-2 rounded border-gray-500 p-1 px-2 mr-4 hover:bg-green-800 transition-all ease-in-out">Editar</li>
+                        <li className="border-2 rounded border-gray-500 p-1 px-2 mr-4 hover:bg-green-800 transition-all ease-in-out">
+                          Editar
+                        </li>
                       </Link>
                       <button
                         className="border-2 rounded border-gray-500 p-1 px-2 hover:bg-orange-500 transition-all ease-in-out"
@@ -99,8 +106,6 @@ function Gatos() {
         })}
       </div>
     </div>
-
   );
 }
 export default Gatos;
-
