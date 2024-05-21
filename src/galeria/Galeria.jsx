@@ -16,7 +16,8 @@ function Galeria() {
   }, []);
 
   const obtenerGatos = async () => {
-    const gatos = (await axios.get("http://localhost:5050/galeria")).data;
+    const gatos = await (axios.get("http://localhost:5050/rutasGatos/galeria")).data;
+    console.log(gatos)
     setData(gatos); // Le coloca esa info. a "data" (la lista de gatos)
   };
 
