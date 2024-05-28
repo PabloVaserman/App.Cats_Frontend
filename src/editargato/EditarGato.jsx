@@ -8,7 +8,7 @@ import axios from "axios"
 
 function EditarGato() {
 
-const params=useParams()
+const { id }=useParams()
 const [nombre, setNombre] = useState('')
 const [raza,setRaza]= useState('')
 const [temperamento, setTemperamento]= useState('')
@@ -18,7 +18,7 @@ const navegar=useNavigate()
 
 useEffect(() => {
 
-axios.put (`http://localhost:5050/editar/`+ params.id).then(res=>{ 
+axios.put (`http://localhost:5050/rutasGatos/editar/${id}`).then(res=>{ 
     let dataGato= res.data
 
 
@@ -46,7 +46,7 @@ description: descripcion,
 // Llamo al back para generar una modificación en la DB
 // Le envío los datos en "gatoUpdate"
 
-axios.put('http://localhost:5050/editar/' + params.id, gatoUpdate).then(res => {
+axios.put(`http://localhost:5050/rutasGatos/editar/${id}`, gatoUpdate).then(res => {
     alert('Gato actualizado con éxito!')
     navegar("/")
 }) 
