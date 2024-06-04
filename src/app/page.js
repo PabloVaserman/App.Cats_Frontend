@@ -24,7 +24,7 @@ function App() {
           <Route path="/" element={<Carrusel />}></Route>
           <Route path="/listado" element={<Gatos />}></Route>
           <Route path="/agregargato" element={<AgregarGato />}></Route>
-          <Route path="/editargato" element={<EditarGato />}></Route>
+          <Route path="/editargato/:id" element={<EditarGato />}></Route>
           <Route path="/galeria" element={<Galeria />}></Route>
         </Routes>
       </BrowserRouter>
