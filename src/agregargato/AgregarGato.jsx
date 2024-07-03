@@ -17,7 +17,9 @@ function AgregarGato() {
   // Agrego estados para verificaciones:  el nombre es válido en el formulario, el peso recibe números, la imagen es una Url, el correo fue ingresado y es válido.
 
   const [nombreValido, setNombreValido] = useState("");
-  const [nuevoPeso, setNuevoPeso] = useState("");
+  const [error, setError] = useState("");
+
+  const [esMailValido, setEsMailValido] = useState("");
 
   const navegar = useNavigate();
 
@@ -57,40 +59,70 @@ function AgregarGato() {
       alert("El nombre es obligatorio");
       return;
     }
+
+    if (urlImagen === "") {
+      alert("Debe ingresar la URL de la imagen");
+      return;
+    } else if (urlImagen === "") {
+      alert("Debe ingresar la URL de la imagen");
+      return;
+  } else if (typeof urlImagen !== 'string' || (!urlImagen.startsWith("http://") && !urlImagen.startsWith("https://"))) {
+      alert("Ingrese una URL válida que comience con http:// o https://");
+      return;
+  } else if (!/\.(jpeg|jpg|gif|png)$/.test(urlImagen)) {
+      alert("La URL de la imagen debe tener una extensión válida (jpeg, jpg, gif, png)");
+      return;
+    }
+    if (mail === "" || !/\S+@\S+\.\S+/.test(mail)) {
+      alert("Debe ingresar un correo electrónico válido");
+      return;
+  }
+
+    setImagen(urlImagen); // Si se cumplen las validaciones, actualiza el estado de la imagen
+
+    setEmail(mail); // Actualiza el estado del correo electrónico si todas las validaciones son exitosas
+     
   };
 
-  {
-    /* CONTROLADOR DEL EVENTO "PESO" 
-  const pesoChange = (e) => {
-    const checkPeso = e.target.value;
-    if (checkPeso.trim() !== '' || checkPeso.length === 1 || (checkPeso.length === 2 && checkPeso[0] === '0')) {
-    setPeso(checkPeso);
-    } else if (!isNaN(checkPeso) && parseFloat(checkPeso) >= 0.5 && parseFloat(checkPeso) < 30) {
-     setPeso(checkPeso);
-     } else {
-     alert("El peso debe estar entre 0,400 gramos y 30 kilos");
-     }
-    }         */
-  }
+  
+  
+    {/* FUNCIÓN MANEJADORA DEL EVENTO EMAIL */}
+
+//     const handleEmailChange = (e) => {
+      const handleEmailChange = (e) => {
+        const checkMail = e.target.value
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!checkMail.match(emailPattern)) {
+      setEsMailValido('Por favor ingresa un email válido');
+    } else {
+      setEsMailValido('');
+    }
+         setEmail(checkMail);  // Actualiza el estado del correo electrónico
+    };
+    
+
+ //   const handleEmailBlur = () => {       // Lo verifica cuando termina de ingresarlo
+ //     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //    setEsMailValido(mail.length > 0 ? emailPattern.test(mail) : true);
+//  };
+  
   // FUNCIÓN MANEJADORA DEL EVENTO "URL IMAGEN"
 
-  
   const urlImagen = (e) => {
-    const inputValue = e.target.value;
+    const url = e.target.value;
 
-    // Validar que la URL sea una imagen válida
-    if (isImagenValida(inputValue)) {
-      setImagen(inputValue);
-     
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+      setError(
+        "Por favor ingresa una URL válida que comience con http:// o https://"
+      );
+    } else if (!/\.(jpeg|jpg|gif|png)$/.test(url)) {
+      setError("La URL debe ser una imagen con extensión jpeg, jpg, gif o png");
     } else {
-      setImagen('');
-      alert('Por favor ingresa una URL de imagen válida.');
+      setError(""); // Limpia el mensaje de error si la URL y la extensión son válidas
     }
-  }
 
-  const isImagenValida = (url) => {
-    return /\.(jpeg|jpg|gif|png)$/.test(url);
-  }
+    setImagen(url)
+  };
 
   //
 
@@ -216,16 +248,17 @@ function AgregarGato() {
                     const checkPeso = e.target.value;
                     if (
                       checkPeso.trim() === "" ||
-                      (checkPeso.length === 1 && /^[0-9]$/.test(checkPeso))  // Verifica si el campo está vacío o si contiene un sólo dígito comprendido entre 0 y 9. Si se cumple esta condición, actualiza el peso. Permite la eliminación de un solo dígito comprendido entre 0 y 9 sin activar la alerta.
+                      (checkPeso.length === 1 && /^[0-9]$/.test(checkPeso)) // Verifica si el campo está vacío o si contiene un sólo dígito comprendido entre 0 y 9. Si se cumple esta condición, actualiza el peso. Permite la eliminación de un solo dígito comprendido entre 0 y 9 sin activar la alerta.
                     ) {
                       setPeso(checkPeso);
                     } else if (
-                      !isNaN(checkPeso) &&   // Valida si el valor ingresado está comprendido entre 0,400 gramos y 30 kilos. Si se cumple, actualiza el estado.
+                      !isNaN(checkPeso) && // Valida si el valor ingresado está comprendido entre 0,400 gramos y 30 kilos. Si se cumple, actualiza el estado.
                       parseFloat(checkPeso) >= 0.5 &&
                       parseFloat(checkPeso) < 30
                     ) {
                       setPeso(checkPeso);
-                    } else {     // Si ninguna de las condiciones se cumple, dispara el alerta. 
+                    } else {
+                      // Si ninguna de las condiciones se cumple, dispara el alerta.
                       alert("El peso debe estar entre 0,400 gramos y 30 kilos");
                     }
                   }}
@@ -292,10 +325,21 @@ function AgregarGato() {
                   // className="form-control border border-gray-300 rounded-md px-3 py-2"
                   value={imagen}
                   placeholder="Ingresa la URL"
-                 onChange={urlImagen}
-                 
-                 // onChange={(e) => setImagen(e.target.value)}
+                  onChange={urlImagen}
+
+                  // onChange={(e) => setImagen(e.target.value)}
                 />
+                {error && (
+                  <p
+                    style={{
+                      color: "grey",
+                      fontFamily: "cursive",
+                      fontSize: "16px",
+                    }}
+                  >
+                    {error}
+                  </p>
+                )}
               </div>
 
               {/*    <div className="mb-3"> */}
@@ -316,8 +360,13 @@ function AgregarGato() {
                   // className="form-control border border-gray-300 rounded-md px-3 py-2"
                   value={mail}
                   placeholder="Ingresa un mail de contacto"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleEmailChange} // Actualiza el estado del correo electrónico
+               //   onBlur={handleEmailBlur}   // Realiza la verificación cuando el usuario terminó de ingresar el mail
+                 // onChange={(e) => setEmail(e.target.value)}
                 />
+                {esMailValido && <p style={{ color: 'grey', fontSize:"1rem", fontFamily:"cursive" }}>{esMailValido}</p>}
+               
+               {/*   {!esMailValido && <p style={{ color: 'grey', fontSize:"1rem", fontFamily:"cursive" }}>Por favor ingresa un email válido</p>} */}
               </div>
             </div>
           </div>
