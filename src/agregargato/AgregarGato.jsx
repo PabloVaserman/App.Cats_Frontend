@@ -4,6 +4,7 @@ import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Swal from 'sweetalert2'
 
 function AgregarGato() {
   const [nombre, setNombre] = useState("");
@@ -56,24 +57,34 @@ function AgregarGato() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!nombreValido) {
-      alert("El nombre es obligatorio");
+   //   alert("El nombre es obligatorio");  // Modal con SweetAlert
+      Swal.fire("El nombre es obligatorio")
       return;
     }
 
-    if (urlImagen === "") {
-      alert("Debe ingresar la URL de la imagen");
+    if (urlImagen === "") {    // Verifica si la variable está vacía
+    //  alert("Debe ingresar la URL de la imagen");  // Modal con SweetAlert
+      Swal.fire("Debes ingresar la URL de la imagen");
       return;
-    } else if (urlImagen === "") {
-      alert("Debe ingresar la URL de la imagen");
-      return;
-  } else if (typeof urlImagen !== 'string' || (!urlImagen.startsWith("http://") && !urlImagen.startsWith("https://"))) {
+   
+  }  
+  
+  if (typeof urlImagen !== 'string' || (!urlImagen.startsWith("http://") && !urlImagen.startsWith("https://"))) { // Verifica si no es una cadena de texto o no comienza ok.
       alert("Ingrese una URL válida que comience con http:// o https://");
       return;
-  } else if (!/\.(jpeg|jpg|gif|png)$/.test(urlImagen)) {
+  } 
+  
+  if (!/\.(jpeg|jpg|gif|png)$/.test(urlImagen)) {
       alert("La URL de la imagen debe tener una extensión válida (jpeg, jpg, gif, png)");
       return;
     }
-    if (mail === "" || !/\S+@\S+\.\S+/.test(mail)) {
+    if (mail === "") {
+    //   alert("Debe ingresar un mail de contacto")   // Modal con SweetAlert
+      Swal.fire("Debe ingresar un mail de contacto")
+      return
+    } 
+      else if (
+      !/\S+@\S+\.\S+/.test(mail)) {
       alert("Debe ingresar un correo electrónico válido");
       return;
   }
