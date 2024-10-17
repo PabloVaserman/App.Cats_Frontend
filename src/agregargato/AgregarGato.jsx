@@ -4,7 +4,7 @@ import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 function AgregarGato() {
   const [nombre, setNombre] = useState("");
@@ -22,6 +22,8 @@ function AgregarGato() {
 
   const [esMailValido, setEsMailValido] = useState("");
 
+  const [errorDesc, setErrorDesc] = useState("");
+
   const navegar = useNavigate();
 
   function postearGato() {
@@ -38,8 +40,12 @@ function AgregarGato() {
 
     // CONEXIÓN FRONT/BACK
 
-    axios
-      .post("http://localhost:5050/rutasGatos/postear/", newCat) // Le pide al endpoint del back que entre a la DB para crear un nuevo gato.
+    // (Llamada original) 
+   // axios.post("http://localhost:5050/rutasGatos/postear/", newCat) // Le pide al endpoint del back que entre a la DB para crear un nuevo gato.
+
+
+      axios   // llamada a la url deployada
+      .post("https://backendcats-pablos-projects-1f3606e3.vercel.app/rutasGatos/postear/", newCat)
 
       //Cuando consigue la info., entonces...
       .then((res) => {
@@ -55,68 +61,90 @@ function AgregarGato() {
   }
 
   const handleSubmit = (e) => {
+    console.log("URL de la imagen:", urlImagen);
+
     e.preventDefault();
     if (!nombreValido) {
-   //   alert("El nombre es obligatorio");  // Modal con SweetAlert
-      Swal.fire("El nombre es obligatorio")
+      //   alert("El nombre es obligatorio");  // Modal con SweetAlert
+      Swal.fire("El nombre es obligatorio");
       return;
     }
 
-    if (urlImagen === "") {    // Verifica si la variable está vacía
-    //  alert("Debe ingresar la URL de la imagen");  // Modal con SweetAlert
+    if (urlImagen === "") {
+      // Verifica si la variable está vacía
+
+      console.log("URL de la imagen vacía");
+      //  alert("Debe ingresar la URL de la imagen");  // Modal con SweetAlert
       Swal.fire("Debes ingresar la URL de la imagen");
       return;
-   
-  }  
-  
-  if (typeof urlImagen !== 'string' || (!urlImagen.startsWith("http://") && !urlImagen.startsWith("https://"))) { // Verifica si no es una cadena de texto o no comienza ok.
+    }
+    if (
+      typeof urlImagen !== "string" ||
+      (typeof urlImagen !== "undefined" &&
+        !urlImagen.startsWith("http://") &&
+        !urlImagen.startsWith("https://"))
+    ) {
+      console.log("URL de la imagen no válida");
       alert("Ingrese una URL válida que comience con http:// o https://");
       return;
-  } 
-  
-  if (!/\.(jpeg|jpg|gif|png)$/.test(urlImagen)) {
-      alert("La URL de la imagen debe tener una extensión válida (jpeg, jpg, gif, png)");
+    }
+
+    if (!/\.(jpeg|jpg|gif|png)$/.test(urlImagen)) {
+      console.log("Extensión de la URL inválida");
+      alert(
+        "La URL de la imagen debe tener una extensión válida (jpeg, jpg, gif, png)"
+      );
       return;
     }
+
     if (mail === "") {
-    //   alert("Debe ingresar un mail de contacto")   // Modal con SweetAlert
-      Swal.fire("Debe ingresar un mail de contacto")
-      return
-    } 
-      else if (
-      !/\S+@\S+\.\S+/.test(mail)) {
+      //   alert("Debe ingresar un mail de contacto")   // Modal con SweetAlert
+      Swal.fire("Debe ingresar un mail de contacto");
+      return;
+    } else if (!/\S+@\S+\.\S+/.test(mail)) {
       alert("Debe ingresar un correo electrónico válido");
       return;
-  }
+    }
+
+    //
+    // Verifica que la descripción tenga más de 5 caracteres y no se encuentre en blanco para actualizar el estado
+   
+   
+   {/*  if (setDescripcion.trim() === "" || setDescripcion.length <= 5) {
+      alert("Debe ingresar una descripción con más de cinco caracteres");
+      return;
+    }
+
+    */}
+
+    // setDescripcion(descripcion); // Actualizar el estado con la descripción ingresada si cumple las condiciones
 
     setImagen(urlImagen); // Si se cumplen las validaciones, actualiza el estado de la imagen
 
     setEmail(mail); // Actualiza el estado del correo electrónico si todas las validaciones son exitosas
-     
   };
 
-  
-  
-    {/* FUNCIÓN MANEJADORA DEL EVENTO EMAIL */}
+  {
+    /* FUNCIÓN MANEJADORA DEL EVENTO EMAIL */
+  }
 
-//     const handleEmailChange = (e) => {
-      const handleEmailChange = (e) => {
-        const checkMail = e.target.value
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //     const handleEmailChange = (e) => {
+  const handleEmailChange = (e) => {
+    const checkMail = e.target.value;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!checkMail.match(emailPattern)) {
-      setEsMailValido('Por favor ingresa un email válido');
+      setEsMailValido("Por favor ingresa un email válido");
     } else {
-      setEsMailValido('');
+      setEsMailValido("");
     }
-         setEmail(checkMail);  // Actualiza el estado del correo electrónico
-    };
-    
+    setEmail(checkMail); // Actualiza el estado del correo electrónico
+  };
 
- //   const handleEmailBlur = () => {       // Lo verifica cuando termina de ingresarlo
- //     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   const handleEmailBlur = () => {       // Lo verifica cuando termina de ingresarlo
+  //     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   //    setEsMailValido(mail.length > 0 ? emailPattern.test(mail) : true);
-//  };
-  
+  //  };
+
   // FUNCIÓN MANEJADORA DEL EVENTO "URL IMAGEN"
 
   const urlImagen = (e) => {
@@ -132,7 +160,7 @@ function AgregarGato() {
       setError(""); // Limpia el mensaje de error si la URL y la extensión son válidas
     }
 
-    setImagen(url)
+    setImagen(url);
   };
 
   //
@@ -297,8 +325,10 @@ function AgregarGato() {
                 />
               </div>
 
-              <div style={{ marginBottom: "15px" }}>
-                {/*    <div className="mb-3"> */}
+              {/*
+
+            <div style={{ marginBottom: "15px" }}>
+        
                 <label
                   htmlFor="descripción"
                   style={{
@@ -314,11 +344,36 @@ function AgregarGato() {
                   style={{ marginLeft: "8px", borderRadius: "0.5rem" }}
                   //  className="form-control border border-gray-300 rounded-md px-3 py-2"
                   value={descripcion}
-                  onChange={(e) => setDescripcion(e.target.value)}
-                />
-              </div>
+                  // onChange={(e) => setDescripcion(e.target.value)}
 
-              {/*   <div className="mb-3"> */}
+                  onChange={(e) => {
+                    if (e.target.value.length > 5) {
+                      setDescripcion(e.target.value);
+                      setErrorDesc("");
+                    } else {
+                      setErrorDesc(
+                        "La descripción debe tener más de cinco caracteres"
+                      );
+                    }
+
+                    //  muestra el error
+                  }}
+                />
+                {errorDesc && (
+                  <p
+                    style={{
+                      color: "grey",
+                      fontFamily: "cursive",
+                      fontSize: "16px",
+                    }}
+                  >
+                    {errorDesc}
+                  </p>
+                )}
+              </div> 
+              
+               */}
+
               <div style={{ marginBottom: "15px" }}>
                 <label
                   htmlFor="imagen"
@@ -372,12 +427,22 @@ function AgregarGato() {
                   value={mail}
                   placeholder="Ingresa un mail de contacto"
                   onChange={handleEmailChange} // Actualiza el estado del correo electrónico
-               //   onBlur={handleEmailBlur}   // Realiza la verificación cuando el usuario terminó de ingresar el mail
-                 // onChange={(e) => setEmail(e.target.value)}
+                  //   onBlur={handleEmailBlur}   // Realiza la verificación cuando el usuario terminó de ingresar el mail
+                  // onChange={(e) => setEmail(e.target.value)}
                 />
-                {esMailValido && <p style={{ color: 'grey', fontSize:"1rem", fontFamily:"cursive" }}>{esMailValido}</p>}
-               
-               {/*   {!esMailValido && <p style={{ color: 'grey', fontSize:"1rem", fontFamily:"cursive" }}>Por favor ingresa un email válido</p>} */}
+                {esMailValido && (
+                  <p
+                    style={{
+                      color: "grey",
+                      fontSize: "1rem",
+                      fontFamily: "cursive",
+                    }}
+                  >
+                    {esMailValido}
+                  </p>
+                )}
+
+                {/*   {!esMailValido && <p style={{ color: 'grey', fontSize:"1rem", fontFamily:"cursive" }}>Por favor ingresa un email válido</p>} */}
               </div>
             </div>
           </div>
